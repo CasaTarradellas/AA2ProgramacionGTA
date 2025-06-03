@@ -41,6 +41,8 @@ int main()
 
     bool cont = true;
 
+    int cars = 0;
+
     Input input = Input::NONE;
 
 
@@ -53,7 +55,7 @@ int main()
     {
 
         while (config >> mapX >> mapY >> playerHP >> playerPow >> peaje1 >> peaje2 >> numPeatonesLS >> maxDinerosLS >> peatones1Hp >> peatones1Pow >> numPeatonesSF >> maxDinerosSF >> peatones2Hp >> peatones2Pow >> 
-            numPeatonesLV >> maxDinerosLV >> peatones3Hp >> peatones3Pow) {}
+            numPeatonesLV >> maxDinerosLV >> peatones3Hp >> peatones3Pow >> cars) {}
 
     }
     config.close();
@@ -61,7 +63,7 @@ int main()
     cj.setHp(playerHP);
     cj.setPow(playerPow);
 
-    Map map(mapX, mapY);
+    Map map(mapX, mapY, cars);
     numPeatones = numPeatonesLS + numPeatonesSF;
 
     Peaton* peatones = new Peaton[numPeatones];
@@ -111,7 +113,17 @@ int main()
         }
         else if (GetAsyncKeyState(VK_ESCAPE))
         {
-            cont = false;
+            /*cont = false;*/
+
+            if (cj.isInCar())
+            {
+                cj.getOffCar(map.getMap());
+            }
+            else
+            {
+                cj.getInCar(map.getMap());
+            }
+            
         }
         else
         {

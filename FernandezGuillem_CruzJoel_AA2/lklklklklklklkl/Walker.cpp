@@ -86,7 +86,7 @@ void Peaton::move(Cell** map, Player& player)
     switch (dir)
     {
     case 1:
-        if (!(map[peatonPos.x][peatonPos.y - 1] == Cell::PARED))
+        if (!(map[peatonPos.x][peatonPos.y - 1] == Cell::PARED || map[peatonPos.x][peatonPos.y - 1] == Cell::COCHE))
         {
             map[peatonPos.x][peatonPos.y] = Cell::VACIO;
             peatonPos.y--;
@@ -94,7 +94,7 @@ void Peaton::move(Cell** map, Player& player)
         }
         break;
     case 2:
-        if (!(map[peatonPos.x][peatonPos.y + 1] == Cell::PARED))
+        if (!(map[peatonPos.x][peatonPos.y + 1] == Cell::PARED || map[peatonPos.x][peatonPos.y + 1] == Cell::COCHE))
         {
             map[peatonPos.x][peatonPos.y] = Cell::VACIO;
             peatonPos.y++;
@@ -102,7 +102,7 @@ void Peaton::move(Cell** map, Player& player)
         }
         break;
     case 3:
-        if (!(map[peatonPos.x - 1][peatonPos.y] == Cell::PARED))
+        if (!(map[peatonPos.x - 1][peatonPos.y] == Cell::PARED || map[peatonPos.x - 1][peatonPos.y] == Cell::COCHE))
         {
             map[peatonPos.x][peatonPos.y] = Cell::VACIO;
             peatonPos.x--;
@@ -110,7 +110,7 @@ void Peaton::move(Cell** map, Player& player)
         }
         break;
     case 4:
-        if (!(map[peatonPos.x + 1][peatonPos.y] == Cell::PARED))
+        if (!(map[peatonPos.x + 1][peatonPos.y] == Cell::PARED || map[peatonPos.x + 1][peatonPos.y] == Cell::COCHE))
         {
             map[peatonPos.x][peatonPos.y] = Cell::VACIO;
             peatonPos.x++;

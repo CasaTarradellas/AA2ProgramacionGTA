@@ -6,28 +6,28 @@ void Player::movePosition(Input input, Cell** map)
     switch (input)
     {
     case Input::UP:
-        if (!(map[playerPos.x][playerPos.y - 1] == Cell::PARED || map[playerPos.x][playerPos.y - 1] == Cell::PEATON))
+        if (!(map[playerPos.x][playerPos.y - 1] == Cell::PARED || map[playerPos.x][playerPos.y - 1] == Cell::PEATON || map[playerPos.x][playerPos.y - 1] == Cell::COCHE))
         {
             playerPos.y--;
         }
         playerDir = Direction::UP;
         break;
     case Input::DOWN:
-        if (!(map[playerPos.x][playerPos.y + 1] == Cell::PARED || map[playerPos.x][playerPos.y + 1] == Cell::PEATON))
+        if (!(map[playerPos.x][playerPos.y + 1] == Cell::PARED || map[playerPos.x][playerPos.y + 1] == Cell::PEATON || map[playerPos.x][playerPos.y + 1] == Cell::COCHE))
         {
             playerPos.y++;
         }
         playerDir = Direction::DOWN;
         break;
     case Input::LEFT:
-        if (!(map[playerPos.x - 1][playerPos.y] == Cell::PARED || map[playerPos.x - 1][playerPos.y] == Cell::PEATON))
+        if (!(map[playerPos.x - 1][playerPos.y] == Cell::PARED || map[playerPos.x - 1][playerPos.y] == Cell::PEATON || map[playerPos.x - 1][playerPos.y] == Cell::COCHE))
         {
             playerPos.x--;
         }
         playerDir = Direction::LEFT;
         break;
     case Input::RIGHT:
-        if (!(map[playerPos.x + 1][playerPos.y] == Cell::PARED || map[playerPos.x + 1][playerPos.y] == Cell::PEATON))
+        if (!(map[playerPos.x + 1][playerPos.y] == Cell::PARED || map[playerPos.x + 1][playerPos.y] == Cell::PEATON || map[playerPos.x + 1][playerPos.y] == Cell::COCHE))
         {
             playerPos.x++;
         }
@@ -120,4 +120,51 @@ void Player::atack(Cell** map, Peaton* peatones, int numPeatones)
         }
     }
 
+}
+
+void Player::getInCar(Cell** map)
+{
+    for (int i = -1; i <= 1; i++)
+    {
+        for (int j = -1; j <= 1; j++)
+        {
+            if (map[playerPos.x + j][playerPos.y + i] == Cell::COCHE)
+            {
+
+                map[playerPos.x][playerPos.y] = Cell::VACIO;
+
+                playerPos.x = playerPos.x + j;
+                playerPos.y = playerPos.y + i;
+                inCar = true;
+                
+                return;
+            }
+
+        }
+    }
+}
+
+void Player::getOffCar(Cell** map)
+{
+    for (int i = -1; i <= 1; i++)
+    {
+        for (int j = -1; j <= 1; j++)
+        {
+            if (map[playerPos.x + j][playerPos.y + i] == Cell::VACIO)
+            {
+
+                map[playerPos.x][playerPos.y] = Cell::COCHE;
+
+                playerPos.x = playerPos.x + j;
+                playerPos.y = playerPos.y + i;
+
+                map[playerPos.x][playerPos.y] = Cell::CJ;
+
+                inCar = false;
+
+                return;
+            }
+
+        }
+    }
 }

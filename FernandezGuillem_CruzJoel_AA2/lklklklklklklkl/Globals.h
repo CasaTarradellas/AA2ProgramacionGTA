@@ -10,7 +10,7 @@ extern int mapY;
 
 // Enums
 enum class City { LOSSANTOS, SANFIERRO, LASVENTURAS };
-enum class Cell { CJ, PARED, PEATON, DINERO, VACIO };
+enum class Cell { CJ, PARED, PEATON, DINERO, VACIO, COCHE };
 enum class Input { UP, DOWN, LEFT, RIGHT, NONE };
 enum class Direction { UP, DOWN, LEFT, RIGHT };
 
