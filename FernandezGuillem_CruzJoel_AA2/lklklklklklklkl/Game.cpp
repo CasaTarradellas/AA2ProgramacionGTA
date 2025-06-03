@@ -122,7 +122,7 @@ int main()
 
         for (int i = 0; i < numPeatones; i++)
         {
-            peatones[i].move(map.getMap());
+            peatones[i].move(map.getMap(), cj);
         }
 
         cj.movePosition(input, map.getMap());
@@ -135,6 +135,7 @@ int main()
         map.printMap(cj);
 
         std::cout << '\n' << "                                   DINEROS: " << cj.getDineros() << std::endl;
+        std::cout << '\n' << "                              VIDA: " << cj.getHp() << std::endl;
 
         //FRAMECONTROL 
         Sleep(500);

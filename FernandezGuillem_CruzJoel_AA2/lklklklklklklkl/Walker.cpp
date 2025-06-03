@@ -1,5 +1,6 @@
 #include "Walker.h"
 #include "Globals.h"
+#include "Player.h"
 
 void Peaton::initPeaton(City city, int newHp, int newPow)
 {
@@ -51,6 +52,7 @@ void Peaton::spawn(Cell** map)
 
 void Peaton::die(Cell** map)
 {
+    hp = maxHp;
     map[peatonPos.x][peatonPos.y] = Cell::DINERO;
     spawn(map);
 }
@@ -76,6 +78,7 @@ void Peaton::move(Cell** map, Player& player)
         {
             player.setHp(player.getHp() - pow);
         }
+        return;
     }
 
     int dir = randNum(1, 4);

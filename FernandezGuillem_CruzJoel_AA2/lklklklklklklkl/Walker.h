@@ -1,6 +1,6 @@
 #pragma once
 #include "Globals.h"
-#include "Player.h"
+class Player;
 
 enum class PeatonType { AGRESIVE, NEUTRAL };
 
