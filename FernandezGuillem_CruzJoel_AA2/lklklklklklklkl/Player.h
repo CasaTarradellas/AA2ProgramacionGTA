@@ -1,6 +1,7 @@
 #pragma once
 #include "Globals.h"
 #include "Walker.h"
+#include "Map.h"
 
 class Player
 {
@@ -10,6 +11,7 @@ class Player
     int dinero = 0;
     int hp = 0;
     int pow = 0;
+    bool inCar = false;
 
 public:
 
@@ -18,6 +20,12 @@ public:
     Direction getDirection() const { return playerDir; }
     void setDir(Direction dir) { playerDir = dir; }
     int getDineros() { return dinero; }
+
+    void getInCar(Cell** map);
+    void getOffCar(Cell** map);
+
+    bool isInCar() { return inCar; }
+
     void setPow(int newPow) { pow = newPow; }
     int getPow() { return pow; }
     void setHp(int newHp) { hp = newHp; }
