@@ -113,7 +113,11 @@ int main()
         }
         else if (GetAsyncKeyState(VK_ESCAPE))
         {
-            /*cont = false;*/
+            cont = false;
+            
+        }
+        else if (GetAsyncKeyState('E'))
+        {
 
             if (cj.isInCar())
             {
@@ -123,7 +127,7 @@ int main()
             {
                 cj.getInCar(map.getMap());
             }
-            
+
         }
         else
         {
@@ -137,7 +141,15 @@ int main()
             peatones[i].move(map.getMap(), cj);
         }
 
-        cj.movePosition(input, map.getMap());
+        if (cj.isInCar())
+        {
+            cj.movePositionCar(input, map.getMap());
+        }
+        else
+        {
+            cj.movePosition(input, map.getMap());
+        }
+        
         cj.movePlayer(map.getMap(), input, maxDinerosLS, maxDinerosSF);
 
         
