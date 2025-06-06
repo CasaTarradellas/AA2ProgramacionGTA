@@ -17,7 +17,7 @@ public:
 
 	void initBigSmoke(int hp, int pow);
 	void spawnBS(Cell** map);
-	void dieBS(Cell** map);
+	void dieBS(Cell** map, gameState& state);
 	bool isCloseToPlayerBS(Cell** map);
 	void moveBS(Cell** map, Player& player);
 

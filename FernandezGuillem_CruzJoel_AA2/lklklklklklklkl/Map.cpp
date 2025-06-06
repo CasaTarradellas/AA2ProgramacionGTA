@@ -53,10 +53,19 @@ void Map::initMap(Player player)
     {
         for (int j = 6; j < mapX; j++)
         {
-            if ((j == col1 || j == col2) && i != (mapY / 2) && i != ((mapY / 2) - 1) && i != ((mapY / 2) + 1))
+            if ((j == col1 || j == col2))
             {
-                map[j][i] = Cell::PARED;
+                if (i != (mapY / 2) && i != ((mapY / 2) - 1) && i != ((mapY / 2) + 1))
+                {
+                    map[j][i] = Cell::PARED;
+                }
+                else
+                {
+                    map[j][i] = Cell::PEAJE;
+                }
+                
             }
+            
         }
     }
 
@@ -128,6 +137,9 @@ void Map::printMap(Player player)
                 break;
             case Cell::BIGSMOKE:
                 std::cout << "B ";
+                break;
+            case Cell::PEAJE:
+                std::cout << "T ";
                 break;
             default:
                 std::cout << "  ";

@@ -80,7 +80,7 @@ void Player::movePositionCar(Input input, Cell** map)
     }
 }
 
-void Player::movePlayer(Cell** map, Input input, int maxDinerosLS, int maxDinerosSF, int peaje1, int peaje2, bool& cont)
+void Player::movePlayer(Cell** map, Input input, int maxDinerosLS, int maxDinerosSF, int peaje1, int peaje2, gameState& state)
 {
     if (input == Input::NONE)
         return;
@@ -108,7 +108,7 @@ void Player::movePlayer(Cell** map, Input input, int maxDinerosLS, int maxDinero
     int col2 = 2 * mapX / 3;
     bool enAgujero = (playerPos.y == mapY / 2 || playerPos.y == (mapY / 2) - 1 || playerPos.y == (mapY / 2) + 1);
 
-    if (playerPos.x == col1 && enAgujero)
+    if (playerPos.x == col1 && enAgujero && !hasPaid1)
     {
         if (dinero < peaje1)
         {
@@ -117,13 +117,23 @@ void Player::movePlayer(Cell** map, Input input, int maxDinerosLS, int maxDinero
             std::cout << "         ¡GAME OVER!         " << std::endl;
             std::cout << " No tienes $" << peaje1 << " para cruzar el peaje 1." << std::endl;
             std::cout << "==============================\n" << std::endl;
-            cont = false;
+            state = gameState::MENU;
             return;
         }
+        else
+        {
+            dinero -= peaje1;
+            hasPaid1 = true;
+            for (int i = -1; i < 2; i++)
+            {
+                if (map[playerPos.x][mapY/2 + i] == Cell::PEAJE)
+                {
+                    map[playerPos.x][mapY/2 + i] = Cell::VACIO;
+                }
+            }
+        }
     }
-
-    // Paso de San Fierro a Las Venturas
-    if (playerPos.x == col2 && enAgujero)
+    else if (playerPos.x == col2 && enAgujero && !hasPaid2)
     {
         if (dinero < peaje2)
         {
@@ -132,8 +142,20 @@ void Player::movePlayer(Cell** map, Input input, int maxDinerosLS, int maxDinero
             std::cout << "         ¡GAME OVER!         " << std::endl;
             std::cout << " No tienes $" << peaje2 << " para cruzar el peaje 2." << std::endl;
             std::cout << "==============================\n" << std::endl;
-            cont = false;
+            state = gameState::MENU;
             return;
+        }
+        else
+        {
+            dinero -= peaje2;
+            hasPaid2 = true;
+            for (int i = -1; i < 2; i++)
+            {
+                if (map[playerPos.x][mapY / 2 + i] == Cell::PEAJE)
+                {
+                    map[playerPos.x][mapY / 2 + i] = Cell::VACIO;
+                }
+            }
         }
     }
 
@@ -183,7 +205,7 @@ void Player::movePlayer(Cell** map, Input input, int maxDinerosLS, int maxDinero
     }
 }
 
-void Player::atack(Cell** map, Peaton* peatones, int numPeatones, BigSmoke* BS)
+void Player::atack(Cell** map, Peaton* peatones, int numPeatones, BigSmoke* BS, gameState& state)
 {
 
     int posX = 0;
@@ -231,7 +253,7 @@ void Player::atack(Cell** map, Peaton* peatones, int numPeatones, BigSmoke* BS)
             BS->setHpBS(BS->getHpBS() - 1);
             if (BS->getHpBS() <= 0)
             {
-                BS->dieBS(map);
+                BS->dieBS(map, state);
             }
         }
     }

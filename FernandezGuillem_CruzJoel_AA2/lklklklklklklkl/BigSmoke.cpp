@@ -22,10 +22,21 @@ void BigSmoke::spawnBS(Cell** map)
     map[bigSmokePos.x][bigSmokePos.y] = Cell::BIGSMOKE;
 }
 
-void BigSmoke::dieBS(Cell** map)
+void BigSmoke::dieBS(Cell** map, gameState& state)
 {
     map[bigSmokePos.x][bigSmokePos.y] = Cell::VACIO;
     isAlive = false;
+
+    system("CLS");
+    std::cout << "\n==============================" << std::endl;
+    std::cout << "         !GAME OVER!         " << std::endl;
+    std::cout << "   Has asesinado a Big Smoke" << std::endl;
+    std::cout << "          !YOU WIN!" << std::endl;
+    std::cout << "==============================\n" << std::endl;
+    state = gameState::MENU;
+    return;
+        
+    
 }
 
 bool BigSmoke::isCloseToPlayerBS(Cell** map)
