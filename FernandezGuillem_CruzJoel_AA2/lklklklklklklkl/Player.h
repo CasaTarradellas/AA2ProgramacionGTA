@@ -2,10 +2,10 @@
 #include "Globals.h"
 #include "Walker.h"
 #include "Map.h"
+#include "BigSmoke.h"
 
 class Player
 {
-
     Position playerPos;
     Direction playerDir;
     int dinero = 0;
@@ -34,8 +34,8 @@ public:
 
     void movePosition(Input input, Cell** map);
     void movePositionCar(Input input, Cell** map);
-    void movePlayer(Cell** map, Input input, int maxDinerosLS, int maxDinerosSF);
-    void atack(Cell** map, Peaton* peatones, int numPeatones);
+    void movePlayer(Cell** map, Input input, int maxDinerosLS, int maxDinerosSF, int peaje1, int peaje2, bool& cont);
+    void atack(Cell** map, Peaton* peatones, int numPeatones, BigSmoke* BS);
 
 
 };

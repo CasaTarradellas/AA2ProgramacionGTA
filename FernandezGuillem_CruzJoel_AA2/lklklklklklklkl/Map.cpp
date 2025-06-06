@@ -98,7 +98,7 @@ void Map::printMap(Player player)
                 continue;
             }
 
-            switch (map[j][i])  // map[x][y] = map[columna][fila]
+            switch (map[j][i])
             {
             case Cell::PARED:
                 std::cout << "X ";
@@ -125,6 +125,9 @@ void Map::printMap(Player player)
                 break;
             case Cell::COCHE:
                 std::cout << "C ";
+                break;
+            case Cell::BIGSMOKE:
+                std::cout << "B ";
                 break;
             default:
                 std::cout << "  ";

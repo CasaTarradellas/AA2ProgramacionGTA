@@ -1,33 +1,34 @@
 #include "Player.h"
 #include "Globals.h"
+#include "BigSmoke.h"
 
 void Player::movePosition(Input input, Cell** map)
 {
     switch (input)
     {
     case Input::UP:
-        if (!(map[playerPos.x][playerPos.y - 1] == Cell::PARED || map[playerPos.x][playerPos.y - 1] == Cell::PEATON || map[playerPos.x][playerPos.y - 1] == Cell::COCHE))
+        if (!(map[playerPos.x][playerPos.y - 1] == Cell::PARED || map[playerPos.x][playerPos.y - 1] == Cell::PEATON || map[playerPos.x][playerPos.y - 1] == Cell::COCHE || map[playerPos.x][playerPos.y - 1] == Cell::BIGSMOKE))
         {
             playerPos.y--;
         }
         playerDir = Direction::UP;
         break;
     case Input::DOWN:
-        if (!(map[playerPos.x][playerPos.y + 1] == Cell::PARED || map[playerPos.x][playerPos.y + 1] == Cell::PEATON || map[playerPos.x][playerPos.y + 1] == Cell::COCHE))
+        if (!(map[playerPos.x][playerPos.y + 1] == Cell::PARED || map[playerPos.x][playerPos.y + 1] == Cell::PEATON || map[playerPos.x][playerPos.y + 1] == Cell::COCHE || map[playerPos.x][playerPos.y + 1] == Cell::BIGSMOKE))
         {
             playerPos.y++;
         }
         playerDir = Direction::DOWN;
         break;
     case Input::LEFT:
-        if (!(map[playerPos.x - 1][playerPos.y] == Cell::PARED || map[playerPos.x - 1][playerPos.y] == Cell::PEATON || map[playerPos.x - 1][playerPos.y] == Cell::COCHE))
+        if (!(map[playerPos.x - 1][playerPos.y] == Cell::PARED || map[playerPos.x - 1][playerPos.y] == Cell::PEATON || map[playerPos.x - 1][playerPos.y] == Cell::COCHE || map[playerPos.x - 1][playerPos.y] == Cell::BIGSMOKE))
         {
             playerPos.x--;
         }
         playerDir = Direction::LEFT;
         break;
     case Input::RIGHT:
-        if (!(map[playerPos.x + 1][playerPos.y] == Cell::PARED || map[playerPos.x + 1][playerPos.y] == Cell::PEATON || map[playerPos.x + 1][playerPos.y] == Cell::COCHE))
+        if (!(map[playerPos.x + 1][playerPos.y] == Cell::PARED || map[playerPos.x + 1][playerPos.y] == Cell::PEATON || map[playerPos.x + 1][playerPos.y] == Cell::COCHE || map[playerPos.x + 1][playerPos.y] == Cell::BIGSMOKE))
         {
             playerPos.x++;
         }
@@ -79,9 +80,8 @@ void Player::movePositionCar(Input input, Cell** map)
     }
 }
 
-void Player::movePlayer(Cell** map, Input input, int maxDinerosLS, int maxDinerosSF)
+void Player::movePlayer(Cell** map, Input input, int maxDinerosLS, int maxDinerosSF, int peaje1, int peaje2, bool& cont)
 {
-
     if (input == Input::NONE)
         return;
 
@@ -102,9 +102,41 @@ void Player::movePlayer(Cell** map, Input input, int maxDinerosLS, int maxDinero
                 dinero += randNum(5, maxDinerosSF);
             }
         }
-        
-
     }
+
+    int col1 = mapX / 3;
+    int col2 = 2 * mapX / 3;
+    bool enAgujero = (playerPos.y == mapY / 2 || playerPos.y == (mapY / 2) - 1 || playerPos.y == (mapY / 2) + 1);
+
+    if (playerPos.x == col1 && enAgujero)
+    {
+        if (dinero < peaje1)
+        {
+            system("CLS");
+            std::cout << "\n==============================" << std::endl;
+            std::cout << "         ¡GAME OVER!         " << std::endl;
+            std::cout << " No tienes $" << peaje1 << " para cruzar el peaje 1." << std::endl;
+            std::cout << "==============================\n" << std::endl;
+            cont = false;
+            return;
+        }
+    }
+
+    // Paso de San Fierro a Las Venturas
+    if (playerPos.x == col2 && enAgujero)
+    {
+        if (dinero < peaje2)
+        {
+            system("CLS");
+            std::cout << "\n==============================" << std::endl;
+            std::cout << "         ¡GAME OVER!         " << std::endl;
+            std::cout << " No tienes $" << peaje2 << " para cruzar el peaje 2." << std::endl;
+            std::cout << "==============================\n" << std::endl;
+            cont = false;
+            return;
+        }
+    }
+
 
     switch (input)
     {
@@ -149,12 +181,9 @@ void Player::movePlayer(Cell** map, Input input, int maxDinerosLS, int maxDinero
         map[playerPos.x - 1][playerPos.y] = Cell::VACIO;
         break;
     }
-
-
-
 }
 
-void Player::atack(Cell** map, Peaton* peatones, int numPeatones)
+void Player::atack(Cell** map, Peaton* peatones, int numPeatones, BigSmoke* BS)
 {
 
     int posX = 0;
@@ -195,6 +224,17 @@ void Player::atack(Cell** map, Peaton* peatones, int numPeatones)
         }
     }
 
+    if (map[posX][posY] == Cell::BIGSMOKE)
+    {
+        if (BS->bigSmokePos.x == posX && BS->bigSmokePos.y == posY)
+        {
+            BS->setHpBS(BS->getHpBS() - 1);
+            if (BS->getHpBS() <= 0)
+            {
+                BS->dieBS(map);
+            }
+        }
+    }
 }
 
 void Player::getInCar(Cell** map)
@@ -205,13 +245,11 @@ void Player::getInCar(Cell** map)
         {
             if (map[playerPos.x + j][playerPos.y + i] == Cell::COCHE)
             {
-
                 map[playerPos.x][playerPos.y] = Cell::VACIO;
 
                 playerPos.x = playerPos.x + j;
                 playerPos.y = playerPos.y + i;
                 inCar = true;
-                
                 return;
             }
 

@@ -5,6 +5,7 @@
 #include "Walker.h"
 #include "Player.h"
 #include "Map.h"
+#include "BigSmoke.h"
 
 
 int main()
@@ -16,6 +17,7 @@ int main()
     Player cj;
     cj.setPosition(3, 3);
     cj.setDir(Direction::UP);
+    BigSmoke BS;
     
     int numPeatonesLS = 0;
     int numPeatonesSF = 0;
@@ -37,6 +39,9 @@ int main()
     int peatones2Pow = 0;
     int peatones3Pow = 0;
 
+    int BSPow = 2;
+    int BSHp = 6;
+
     int numPeatones;
 
     bool cont = true;
@@ -45,11 +50,7 @@ int main()
 
     Input input = Input::NONE;
 
-
-
     std::ifstream config("config.txt");
-
-
 
     if (config.is_open())
     {
@@ -77,6 +78,10 @@ int main()
     }
 
     map.initMap(cj);
+
+    BS.initBigSmoke(BSHp, BSPow);
+
+    BS.spawnBS(map.getMap());
 
     for (int i = 0; i < numPeatones; i++)
     {
@@ -109,7 +114,7 @@ int main()
         }
         else if (GetAsyncKeyState(VK_SPACE))
         {
-            cj.atack(map.getMap(), peatones, numPeatones);
+            cj.atack(map.getMap(), peatones, numPeatones, &BS);
         }
         else if (GetAsyncKeyState(VK_ESCAPE))
         {
@@ -141,6 +146,8 @@ int main()
             peatones[i].move(map.getMap(), cj);
         }
 
+        BS.moveBS(map.getMap(), cj);
+
         if (cj.isInCar())
         {
             cj.movePositionCar(input, map.getMap());
@@ -150,9 +157,7 @@ int main()
             cj.movePosition(input, map.getMap());
         }
         
-        cj.movePlayer(map.getMap(), input, maxDinerosLS, maxDinerosSF);
-
-        
+        cj.movePlayer(map.getMap(), input, maxDinerosLS, maxDinerosSF, peaje1, peaje2, cont);
 
         //RENDER
 
@@ -160,6 +165,8 @@ int main()
 
         std::cout << '\n' << "                                   DINEROS: " << cj.getDineros() << std::endl;
         std::cout << '\n' << "                              VIDA: " << cj.getHp() << std::endl;
+        std::cout << '\n' << "               VIDA BIG SMOKE: " << BS.getHpBS() << std::endl;
+
 
         //FRAMECONTROL 
         Sleep(500);
