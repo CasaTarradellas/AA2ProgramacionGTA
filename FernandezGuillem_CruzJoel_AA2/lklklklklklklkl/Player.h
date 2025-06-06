@@ -12,6 +12,7 @@ class Player
     int hp = 0;
     int pow = 0;
     bool inCar = false;
+    bool overPOM = false;
 
 public:
 
@@ -32,6 +33,7 @@ public:
     int getHp() { return hp; }
 
     void movePosition(Input input, Cell** map);
+    void movePositionCar(Input input, Cell** map);
     void movePlayer(Cell** map, Input input, int maxDinerosLS, int maxDinerosSF);
     void atack(Cell** map, Peaton* peatones, int numPeatones);
 

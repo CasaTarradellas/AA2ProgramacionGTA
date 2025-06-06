@@ -36,6 +36,49 @@ void Player::movePosition(Input input, Cell** map)
     }
 }
 
+void Player::movePositionCar(Input input, Cell** map)
+{
+    switch (input)
+    {
+    case Input::UP:
+        if (!(map[playerPos.x][playerPos.y - 1] == Cell::PARED || map[playerPos.x][playerPos.y - 1] == Cell::COCHE))
+        {
+            if (map[playerPos.x][playerPos.y - 1] == Cell::PEATON)
+                overPOM = true;
+            playerPos.y--;
+        }
+        playerDir = Direction::UP;
+        break;
+    case Input::DOWN:
+        if (!(map[playerPos.x][playerPos.y + 1] == Cell::PARED || map[playerPos.x][playerPos.y + 1] == Cell::COCHE))
+        {
+            if (map[playerPos.x][playerPos.y + 1] == Cell::PEATON)
+                overPOM = true;
+            playerPos.y++;
+        }
+        playerDir = Direction::DOWN;
+        break;
+    case Input::LEFT:
+        if (!(map[playerPos.x - 1][playerPos.y] == Cell::PARED || map[playerPos.x - 1][playerPos.y] == Cell::COCHE))
+        {
+            if (map[playerPos.x + -1][playerPos.y] == Cell::PEATON)
+                overPOM = true;
+            playerPos.x--;
+        }
+        playerDir = Direction::LEFT;
+        break;
+    case Input::RIGHT:
+        if (!(map[playerPos.x + 1][playerPos.y] == Cell::PARED || map[playerPos.x + 1][playerPos.y] == Cell::COCHE))
+        {
+            if (map[playerPos.x + 1][playerPos.y] == Cell::PEATON)
+                overPOM = true;
+            playerPos.x++;
+        }
+        playerDir = Direction::RIGHT;
+        break;
+    }
+}
+
 void Player::movePlayer(Cell** map, Input input, int maxDinerosLS, int maxDinerosSF)
 {
 
@@ -44,14 +87,22 @@ void Player::movePlayer(Cell** map, Input input, int maxDinerosLS, int maxDinero
 
     if (map[playerPos.x][playerPos.y] == Cell::DINERO)
     {
-        if (playerPos.x <= mapX / 3)
+        if (isInCar())
         {
-            dinero += randNum(5, maxDinerosLS);
+            overPOM = true;
         }
         else
         {
-            dinero += randNum(5, maxDinerosSF);
+            if (playerPos.x <= mapX / 3)
+            {
+                dinero += randNum(5, maxDinerosLS);
+            }
+            else
+            {
+                dinero += randNum(5, maxDinerosSF);
+            }
         }
+        
 
     }
 
@@ -59,18 +110,42 @@ void Player::movePlayer(Cell** map, Input input, int maxDinerosLS, int maxDinero
     {
     case Input::UP:
         map[playerPos.x][playerPos.y] = Cell::CJ;
+        if (overPOM)
+        {
+            map[playerPos.x][playerPos.y + 1] = Cell::DINERO;
+            overPOM = false;
+            break;
+        }
         map[playerPos.x][playerPos.y + 1] = Cell::VACIO;
         break;
     case Input::DOWN:
         map[playerPos.x][playerPos.y] = Cell::CJ;
+        if (overPOM)
+        {
+            map[playerPos.x][playerPos.y - 1] = Cell::DINERO;
+            overPOM = false;
+            break;
+        }
         map[playerPos.x][playerPos.y - 1] = Cell::VACIO;
         break;
     case Input::LEFT:
         map[playerPos.x][playerPos.y] = Cell::CJ;
+        if (overPOM)
+        {
+            map[playerPos.x + 1][playerPos.y] = Cell::DINERO;
+            overPOM = false;
+            break;
+        }
         map[playerPos.x + 1][playerPos.y] = Cell::VACIO;
         break;
     case Input::RIGHT:
         map[playerPos.x][playerPos.y] = Cell::CJ;
+        if (overPOM)
+        {
+            map[playerPos.x - 1][playerPos.y] = Cell::DINERO;
+            overPOM = false;
+            break;
+        }
         map[playerPos.x - 1][playerPos.y] = Cell::VACIO;
         break;
     }
