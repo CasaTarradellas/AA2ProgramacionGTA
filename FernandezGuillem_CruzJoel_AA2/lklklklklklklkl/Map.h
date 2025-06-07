@@ -10,10 +10,13 @@ class Map
 public:
 
 	Cell** getMap() { return map; }
-	Map(int w, int h);
+	Map(int w, int h, int cars);
 	~Map();
 	void initMap(Player player);
 	void printMap(Player player);
 
+	int numCars = 0;
+
 };
+
 

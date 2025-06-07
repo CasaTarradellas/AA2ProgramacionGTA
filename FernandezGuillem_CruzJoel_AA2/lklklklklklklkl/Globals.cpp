@@ -1,8 +1,9 @@
-#pragma once
 #include "Globals.h"
 
 int mapX;
 int mapY;
+
+gameState state = gameState::START;
 
 int randNum(int min, int max)
 {

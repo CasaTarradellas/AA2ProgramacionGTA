@@ -2,15 +2,17 @@
 #include "Globals.h"
 #include "Player.h"
 
-Map::Map(int w, int h)
+Map::Map(int w, int h, int cars)
 {
     map = new Cell * [mapX];
     for (int i = 0; i < mapX; ++i) {
         map[i] = new Cell[mapY];
     }
+
+    numCars = cars;
 }
 
-Map::~Map() 
+Map::~Map()
 {
     for (int i = 0; i < mapX; ++i) {
         delete[] map[i];
@@ -51,15 +53,42 @@ void Map::initMap(Player player)
     {
         for (int j = 6; j < mapX; j++)
         {
-            if ((j == col1 || j == col2) && i != (mapY / 2) && i != ((mapY / 2) - 1) && i != ((mapY / 2) + 1))
+            if ((j == col1 || j == col2))
             {
-                map[j][i] = Cell::PARED;
+                if (i != (mapY / 2) && i != ((mapY / 2) - 1) && i != ((mapY / 2) + 1))
+                {
+                    map[j][i] = Cell::PARED;
+                }
+                else
+                {
+                    map[j][i] = Cell::PEAJE;
+                }
+                
             }
+            
         }
     }
 
-    Position pos = player.getPosition();  
-    map[pos.x][pos.y] = Cell::CJ;  
+    Position pos = player.getPosition();
+    map[pos.x][pos.y] = Cell::CJ;
+
+    for (int i = 0; i < numCars; i++)
+    {
+        bool cont = true;
+
+        while (cont)
+        {
+            int randX = randNum(2, mapX - 2);
+            int randY = randNum(2, mapY - 2);
+
+            if (map[randX][randY] == Cell::VACIO)
+            {
+                map[randX][randY] = Cell::COCHE;
+                cont = false;
+            }
+
+        }
+    }
 
 }
 
@@ -78,12 +107,17 @@ void Map::printMap(Player player)
                 continue;
             }
 
-            switch (map[j][i])  // map[x][y] = map[columna][fila]
+            switch (map[j][i])
             {
             case Cell::PARED:
                 std::cout << "X ";
                 break;
             case Cell::CJ:
+                if (player.isInCar())
+                {
+                    std::cout << "C ";
+                    break;
+                }
                 switch (player.getDirection())
                 {
                 case Direction::UP:    std::cout << "^ "; break;
@@ -97,6 +131,15 @@ void Map::printMap(Player player)
                 break;
             case Cell::DINERO:
                 std::cout << "$ ";
+                break;
+            case Cell::COCHE:
+                std::cout << "C ";
+                break;
+            case Cell::BIGSMOKE:
+                std::cout << "B ";
+                break;
+            case Cell::PEAJE:
+                std::cout << "T ";
                 break;
             default:
                 std::cout << "  ";
